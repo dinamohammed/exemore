@@ -2,3 +2,8 @@
 	path = whatsapp
 	url = git@github.com:dinamohammed/Odoo14.git
 	branch = app-gtica_whatsapp_live_free
+
+[submodule "whatsapp2"]
+	path = whatsapp2
+	url = git@github.com:dinamohammed/Odoo14.git
+	branch = app-whatsapp_redirect
