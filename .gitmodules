@@ -1,0 +1,4 @@
+[submodule "whatsapp"]
+	path = whatsapp
+	url = git@github.com:dinamohammed/Odoo14.git
+	branch = app-gtica_whatsapp_live_free
