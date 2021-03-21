@@ -22,8 +22,12 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
+        'security/expenses_security.xml',
         'views/views.xml',
         'views/templates.xml',
     ],
+    'installable': True,
+    'auto_install': False,
+    'application': True,
 }
