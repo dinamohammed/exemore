@@ -8,7 +8,7 @@ from odoo.osv import expression
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
-    
+    #### solve brackets error #############
     
     @api.onchange('seller_ids')
     @api.depends('seller_ids')
