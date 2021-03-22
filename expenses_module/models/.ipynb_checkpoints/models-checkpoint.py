@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from datetime import timedelta, datetime, date
+from odoo.exceptions import ValidationError
 
 
 class ExpenseType(models.Model):
@@ -14,17 +16,22 @@ class ExpenseType(models.Model):
 class ExpenseExpense(models.Model):
     _name = 'expense.expense'
     
+    name = fields.Char('Reference')
     expense_type = fields.Many2one('expense.type','Expense Type')
-    journal_id = fields.Many2one('account.journal','Journal')
     state = fields.Selection([('draft', 'Draft'), ('posted', 'Validated'), ('sent', 'Sent')], 
                              readonly=True, default='draft', copy=False, string="Status")
     move_id = fields.Many2one(
         comodel_name='account.move',
-        string='Journal Entry', required=True, readonly=True, ondelete='cascade',
+        string='Journal Entry', readonly=True, ondelete='cascade',
         check_company=True)
+    journal_id = fields.Many2one('account.journal', string='Journal', required=True, tracking=True, 
+                                 domain="[('type', 'in', ('bank', 'cash'))]")
     currency_id = fields.Many2one('res.currency', string='Currency', store=True, readonly=False,
         compute='_compute_currency_id',
         help="The Expense's currency.")
+
+    amount = fields.Monetary('Amount', currency_field='currency_id')
+    date = fields.Date('Date',default= datetime.today())
     
     
     @api.depends('journal_id')
@@ -41,58 +48,38 @@ class ExpenseExpense(models.Model):
         '''
         return self.env['account.move']._search_default_journal(('bank', 'cash'))
     
-    @api.model_create_multi
-    def create(self, vals_list):
-        # OVERRIDE
-        write_off_line_vals_list = []
-
-        for vals in vals_list:
-
-            # Hack to add a custom write-off line.
-            write_off_line_vals_list.append(vals.pop('write_off_line_vals', None))
-
-            # Force the move_type to avoid inconsistency with residual 'default_move_type' inside the context.
-#             vals['move_type'] = 'entry'
-
-            # Force the computation of 'journal_id' since this field is set on account.move but must have the
-            # bank/cash type.
-            if 'journal_id' not in vals:
-                vals['journal_id'] = self._get_default_journal().id
-
-            # Since 'currency_id' is a computed editable field, it will be computed later.
-            # Prevent the account.move to call the _get_default_currency method that could raise
-            # the 'Please define an accounting miscellaneous journal in your company' error.
-            if 'currency_id' not in vals:
-                journal = self.env['account.journal'].browse(vals['journal_id'])
-                vals['currency_id'] = journal.currency_id.id or journal.company_id.currency_id.id
-
-        payments = super().create(vals_list)
-
-        for i, pay in enumerate(payments):
-            write_off_line_vals = write_off_line_vals_list[i]
-
-            # Write payment_id on the journal entry plus the fields being stored in both models but having the same
-            # name, e.g. partner_bank_id. The ORM is currently not able to perform such synchronization and make things
-            # more difficult by creating related fields on the fly to handle the _inherits.
-            # Then, when partner_bank_id is in vals, the key is consumed by account.payment but is never written on
-            # account.move.
-            to_write = {'expense_id': pay.id}
-            for k, v in vals_list[i].items():
-                if k in self._fields and self._fields[k].store and k in pay.move_id._fields and pay.move_id._fields[k].store:
-                    to_write[k] = v
-
-            if 'line_ids' not in vals_list[i]:
-                to_write['line_ids'] = [(0, 0, line_vals) for line_vals in pay._prepare_move_line_default_vals(write_off_line_vals=write_off_line_vals)]
-
-            pay.move_id.write(to_write)
-
-        return payments
-    
+    def _prepare_move_line(self):
+        for rec in self:
+            debit = credit = rec.currency_id.compute(rec.amount, rec.currency_id)
+#             raise ValidationError('%s'%debit)
+            sequence_code = 'hr.advance.sequence'
+            rec.name = self.env['ir.sequence'].with_context(ir_sequence_date=rec.date).next_by_code(sequence_code)
+            move = {
+             'name': '/',
+             'journal_id': rec.journal_id.id,
+             'date': datetime.today(),
+ 
+             'line_ids': [(0, 0, {
+                     'name': rec.name or '/',
+                     'debit': debit,
+                     'account_id': rec.expense_type.account_id.id,
+                     'partner_id': self.env.user.partner_id.id,
+                 }), (0, 0, {
+                     'name': rec.name or '/',
+                     'credit': credit,
+                     'account_id': rec.journal_id.default_account_id.id,
+                     'partner_id': self.env.user.partner_id.id,
+                 })]
+            }
+            move_id = self.env['account.move'].create(move)
+            return rec.write({ 'move_id': move_id.id})
+        
     
     
     
     def button_confirm(self):
         ''' draft -> posted '''
+        self._prepare_move_line()
         self.move_id._post(soft=False)
         
 
