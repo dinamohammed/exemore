@@ -83,12 +83,13 @@
             id="menu_expenses_main_root"
             groups="group_expenses_user,group_expenses_manager"
             web_icon="expenses_module,static/description/icon.png"
-            sequence="29"/>
+            sequence="28"/>
       
       <menuitem id="expense_main_menu" name="Expenses" 
                 parent="menu_expenses_main_root" sequence="1"/>
-      <menuitem id="expense_menu" name="Expenses" action="expenses_action" parent="expense_main_menu" sequence="2"/>
-      <menuitem id="expense_type_menu" name="Expense Type" action="expenses_type_action" parent="expense_menu" sequence="3"/>
+      <menuitem id="expense_menu" name="Expenses" parent="expense_main_menu" sequence="2"/>
+      <menuitem id="expense_menu2" name="Expenses" action="expenses_action" parent="expense_menu" sequence="4"/>
+      <menuitem id="expense_type_menu2" name="Expense Type" action="expenses_type_action" parent="expense_menu" sequence="5"/>
 
    
   </data>
