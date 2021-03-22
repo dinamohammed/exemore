@@ -87,9 +87,9 @@
       
       <menuitem id="expense_main_menu" name="Expenses" 
                 parent="menu_expenses_main_root" sequence="1"/>
-      <menuitem id="expense_menu" name="Expenses" parent="expense_main_menu" sequence="2"/>
-      <menuitem id="expense_menu2" name="Expenses" action="expenses_action" parent="expense_menu" sequence="4"/>
-      <menuitem id="expense_type_menu2" name="Expense Type" action="expenses_type_action" parent="expense_menu" sequence="5"/>
+      <menuitem id="expense_menu2" name="Expense" action="expenses_action" parent="expense_main_menu" sequence="15"/>
+      <menuitem id="expense_type_menu2" name="Expense Type" action="expenses_type_action" 
+                parent="expense_main_menu" sequence="17"/>
 
    
   </data>
