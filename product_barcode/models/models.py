@@ -22,7 +22,7 @@ class ProductTemplate(models.Model):
             if template.seller_ids[0].id:
                 vendor_id = template.seller_ids[0].id
                 template_id = template.id
-                template.barcode = "%s%s" % (template_id.zfill(5)), vendor_id.zfill(4)))
+                template.barcode = "%s%s" % (template_id.zfill(5), vendor_id.zfill(4))
             else:
                 template.barcode = ""
     
@@ -73,8 +73,8 @@ class ProductProduct(models.Model):
                             color_code += word
                         
                     if product.size_code or color_code:
-                        product.barcode = "%s%s%s%s" % (template_id.zfill(5)), vendor_id.zfill(4)), product.size_code, color_code)
+                        product.barcode = "%s%s%s%s" % (template_id.zfill(5), vendor_id.zfill(4), product.size_code, color_code)
                     else:
-                        product.barcode = "%s%s" % (template_id.zfill(5)), vendor_id.zfill(4)))
+                        product.barcode = "%s%s" % (template_id.zfill(5), vendor_id.zfill(4))
             else:
                 product.barcode = ""
