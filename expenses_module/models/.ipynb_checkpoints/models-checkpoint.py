@@ -52,7 +52,7 @@ class ExpenseExpense(models.Model):
             write_off_line_vals_list.append(vals.pop('write_off_line_vals', None))
 
             # Force the move_type to avoid inconsistency with residual 'default_move_type' inside the context.
-            vals['move_type'] = 'entry'
+#             vals['move_type'] = 'entry'
 
             # Force the computation of 'journal_id' since this field is set on account.move but must have the
             # bank/cash type.
