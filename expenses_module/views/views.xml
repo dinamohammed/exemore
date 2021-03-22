@@ -16,6 +16,8 @@
                           <group name="expenses_info" string="Expenses Info">
                               <field name = "expense_type"/>
                               <field name = "journal_id"/>
+                              <field name = "move_id"/>
+                              <field name = "amount"/>
                           </group>
                       </group>
                   </sheet>
