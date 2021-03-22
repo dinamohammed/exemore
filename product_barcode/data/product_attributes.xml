@@ -7,12 +7,12 @@
             <field name="sequence">20</field>
         </record>
         <record id="product.product_attribute_value_3" model="product.attribute.value">
-            <field name="name">0001</field>
+            <field name="name">001</field>
             <field name="attribute_id" ref="product.product_attribute_2"/>
             <field name="sequence">1</field>
         </record>
         <record id="product.product_attribute_value_4" model="product.attribute.value">
-            <field name="name">0002</field>
+            <field name="name">002</field>
             <field name="attribute_id" ref="product.product_attribute_2"/>
             <field name="sequence">2</field>
         </record>
