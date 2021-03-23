@@ -32,6 +32,8 @@ class ExpenseExpense(models.Model):
 
     amount = fields.Monetary('Amount', currency_field='currency_id')
     date = fields.Date('Date',default= datetime.today())
+    partner_id = fields.Many2one('res.partner', string="Contact")
+
     
     
     @api.depends('journal_id')
@@ -63,12 +65,12 @@ class ExpenseExpense(models.Model):
                      'name': rec.name or '/',
                      'debit': debit,
                      'account_id': rec.expense_type.account_id.id,
-                     'partner_id': self.env.user.partner_id.id,
+                     'partner_id': self.partner_id.id or self.env.user.partner_id.id,
                  }), (0, 0, {
                      'name': rec.name or '/',
                      'credit': credit,
                      'account_id': rec.journal_id.default_account_id.id,
-                     'partner_id': self.env.user.partner_id.id,
+                     'partner_id': self.partner_id.id or self.env.user.partner_id.id,
                  })]
             }
             move_id = self.env['account.move'].create(move)

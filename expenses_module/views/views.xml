@@ -18,6 +18,7 @@
                               <field name = "journal_id"/>
                               <field name = "move_id"/>
                               <field name = "amount"/>
+                              <field name = "partner_id"/>
                           </group>
                       </group>
                   </sheet>
