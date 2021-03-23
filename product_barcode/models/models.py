@@ -50,7 +50,7 @@ class ProductProduct(models.Model):
             color_attr = self.env.ref('product.product_attribute_2')
             size_attr = self.env.ref('product_barcode.product_attribute_size')
 #             raise ValidationError('hhhhhh')
-            if product.variant_seller_ids[0].name.id:
+            if product.variant_seller_ids:
                 vendor_id = product.variant_seller_ids[0].name.id
                 template_id = product.product_tmpl_id.id
                 
