@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_customer_live_contact_customer_live_contact,customer_live_contact.customer_live_contact,model_customer_live_contact_customer_live_contact,base.group_user,1,1,1,1

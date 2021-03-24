@@ -1,0 +1,26 @@
+<odoo>
+  <data>
+    <record id="product_pricelist_view_inherit_company_type" model="ir.ui.view">
+            <field name="name">product.pricelist.form.inherit.company_type</field>
+            <field name="model">product.pricelist</field>
+            <field name="inherit_id" ref="product.product_pricelist_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='country_group_ids']" position="after">
+                        <field name="company_type"/>
+                </xpath>
+          </field>
+      </record>
+      
+      <record id="view_partner_form_inherit_contact_method" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.contact.method</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="contact_method_ids" widget="many2many_checkboxes"/>
+                </xpath>
+          </field>
+      </record>
+      
+  </data>
+</odoo>
