@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="contact_method_sms" model="contact.method">
+        <field name="name">SMS</field>
+        <field name="code">sms</field>
+    </record>
+    
+    <record id="contact_method_email" model="contact.method">
+        <field name="name">Email</field>
+        <field name="code">email</field>
+    </record>
+    
+    <record id="contact_method_Whatsapp" model="contact.method">
+        <field name="name">Whatsapp</field>
+        <field name="code">whatsapp</field>
+    </record>
+    
+</odoo>
