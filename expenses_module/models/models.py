@@ -83,6 +83,7 @@ class ExpenseExpense(models.Model):
         ''' draft -> posted '''
         self._prepare_move_line()
         self.move_id._post(soft=False)
+        self.write({'state':'posted'})
         
 
         
