@@ -21,7 +21,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','contacts','product','sale_management'],
+    'depends': ['base','contacts','product','sale_management','sms','mail','os_whatsapp_integration'],
 
     # always loaded
     'data': [

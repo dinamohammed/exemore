@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, AccessError, Warning
+import datetime
 
 
 class ResPartner(models.Model):
@@ -9,6 +10,8 @@ class ResPartner(models.Model):
     
     contact_method_ids = fields.Many2many('contact.method','contact_method_res_partner_rel','partner_id','contact_method_id'
                                           ,string='Contacting Methods')
+    
+    partners_id_to_followup_dic = {}
     
     @api.onchange('company_type')
     def onchange_company_type_pricelist(self):
@@ -24,8 +27,63 @@ class ResPartner(models.Model):
                                           + '\n'
                                           + 'and Accounts of current Contact..')
             return res
+        
+   ############## will be called in scheduled action to be executed daily ###########    
+    def scheduled_action_function(self):
+        days_to_followup = self.env['res.config.settings']
+        date_to = datetime.today()
+        date_from = date_to - datetime.timedelta(days = days_to_followup.max_days_to_follow_up)
+        sale_transactions = self.env['sale.order'].search(['&'
+                                                           ,('expected_date','>=',date_from)
+                                                           ,('expected_date','<=',date_to)]).partner_id
+        partners_to_note = self.env.search([('id','not in',sale_transactions)])
+        
+        partners_id_to_followup_dic = partners_to_note
+        
+    ##############################################################
 
-    
+    @api.model
+    def action_send_sms(self):
+        for partner in partners_id_to_followup_dic:
+            if 'sms' in partner.contact_method_ids.code:
+                return {
+                    'type': 'ir.actions.act_window',
+                    'view_mode': 'form',
+                    'name': _("Send SMS Text Message"),
+                    'res_model': 'sms.composer',
+                    'target': 'new',
+                    'views': [(False, "form")],
+                    'context': {
+#                         'default_body': self._get_sms_summary(options),
+                        'default_res_model': 'res.partner',
+                        'default_res_id': partner.id,
+                        'default_composition_mode': 'comment',
+                    },
+                }
+            
+    @api.model
+    def send_email(self):
+        for partner in partners_id_to_followup_dic:
+            if 'email' in partner.contact_method_ids.code:
+                email = partner.email
+                if email and email.strip():
+            # When printing we need te replace the \n of the summary by <br /> tags
+                    body_html = self.with_context(print_mode=True, mail=True, lang=partner.lang or self.env.user.lang)
+                    partner.with_context(mail_post_autofollow=True).message_post(
+                        partner_ids=[invoice_partner.id],
+                        body=body_html,
+                        subject=_('%(company)s FollowUp - %(customer)s', company=self.env.company.name, customer=partner.name),
+                        subtype_id=self.env.ref('mail.mt_note').id,
+                        model_description=_('Followup reminder'),
+                        email_layout_xmlid='mail.mail_notification_light',
+                    )
+                    return True
+        
+    @api.model
+    def send_whatsapp(self):
+        for partner in partners_id_to_followup_dic:
+            if 'whatsapp' in partner.contact_method_ids.code:
+                partner.contacts_whatsapp()
 
 class ProductPricelist(models.Model):
     _inherit = 'product.pricelist'
