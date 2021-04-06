@@ -11,7 +11,6 @@ class ResPartner(models.Model):
     contact_method_ids = fields.Many2many('contact.method','contact_method_res_partner_rel','partner_id','contact_method_id'
                                           ,string='Contacting Methods')
     
-    partners_id_to_followup_dic = {}
     
     @api.onchange('company_type')
     def onchange_company_type_pricelist(self):
@@ -31,20 +30,34 @@ class ResPartner(models.Model):
    ############## will be called in scheduled action to be executed daily ###########    
     def scheduled_action_function(self):
         days_to_followup = self.env['res.config.settings']
-        date_to = datetime.today()
+        date_to = datetime.datetime.today()
         date_from = date_to - datetime.timedelta(days = days_to_followup.max_days_to_follow_up)
         sale_transactions = self.env['sale.order'].search(['&'
                                                            ,('expected_date','>=',date_from)
                                                            ,('expected_date','<=',date_to)]).partner_id
-        partners_to_note = self.env.search([('id','not in',sale_transactions)])
         
-        partners_id_to_followup_dic = partners_to_note
+        partners_to_note = self.env['res.partner'].search([('id','not in',sale_transactions.ids)])
+        
+        return partners_to_note
+        
+    #################### To view the partners to followup with ##############
+    
+    def action_view_customers_to_followup(self):
+        partner_ids = self.scheduled_action_function()
+        return {
+            'name': _('Customer Followup'),
+            'view_mode': 'tree',
+            'res_model': 'res.partner',
+            'view_id': self.env.ref('base.view_partner_tree').id,
+            'type': 'ir.actions.act_window',
+            'domain': [('id', 'in', partner_ids.ids)],
+        }
         
     ##############################################################
 
     @api.model
     def action_send_sms(self):
-        for partner in partners_id_to_followup_dic:
+        for partner in self:
             if 'sms' in partner.contact_method_ids.code:
                 return {
                     'type': 'ir.actions.act_window',
@@ -63,7 +76,7 @@ class ResPartner(models.Model):
             
     @api.model
     def send_email(self):
-        for partner in partners_id_to_followup_dic:
+        for partner in self:
             if 'email' in partner.contact_method_ids.code:
                 email = partner.email
                 if email and email.strip():
@@ -81,9 +94,19 @@ class ResPartner(models.Model):
         
     @api.model
     def send_whatsapp(self):
-        for partner in partners_id_to_followup_dic:
+        for partner in self:
             if 'whatsapp' in partner.contact_method_ids.code:
-                partner.contacts_whatsapp()
+                return {
+                    'type': 'ir.actions.act_window',
+                    'name': _('Whatsapp Message'),
+                    'res_model': 'whatsapp.message.wizard',
+                    'target': 'new',
+                    'view_mode': 'form',
+                    'view_type': 'form',
+                    'context': {'default_user_id': self.id},
+                }
+            else:
+                return True
 
 class ProductPricelist(models.Model):
     _inherit = 'product.pricelist'
