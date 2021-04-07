@@ -46,9 +46,9 @@ class ResPartner(models.Model):
         partner_ids = self.scheduled_action_function()
         return {
             'name': _('Customer Followup'),
-            'view_mode': 'tree',
+            'view_mode': 'tree,form',
             'res_model': 'res.partner',
-            'view_id': self.env.ref('base.view_partner_tree').id,
+            'view_id': False,
             'type': 'ir.actions.act_window',
             'domain': [('id', 'in', partner_ids.ids)],
         }
@@ -95,7 +95,7 @@ class ResPartner(models.Model):
     @api.model
     def send_whatsapp(self):
         for partner in self:
-            if 'whatsapp' in partner.contact_method_ids.code:
+#             if 'whatsapp' in partner.contact_method_ids.code:
                 return {
                     'type': 'ir.actions.act_window',
                     'name': _('Whatsapp Message'),
@@ -105,8 +105,8 @@ class ResPartner(models.Model):
                     'view_type': 'form',
                     'context': {'default_user_id': self.id},
                 }
-            else:
-                return True
+#             else:
+#                 return True
 
 class ProductPricelist(models.Model):
     _inherit = 'product.pricelist'
