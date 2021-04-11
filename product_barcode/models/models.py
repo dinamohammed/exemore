@@ -47,7 +47,7 @@ class ProductProduct(models.Model):
         Color Code from field [Variant Color Attribute] [3 digits]
 		"""
         for product in self:
-            color_attr = self.env.ref('product.product_attribute_2')
+            color_attr = self.env.ref('product_barcode.product_attribute_2')
             size_attr = self.env.ref('product_barcode.product_attribute_size')
 #             raise ValidationError('hhhhhh')
             if product.variant_seller_ids:
