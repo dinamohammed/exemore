@@ -9,6 +9,8 @@ from odoo.osv import expression
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
     
+    attribute_line_ids = fields.One2many('product.template.attribute.line', 'product_tmpl_id',
+                                         'Product Attributes', copy=False)
     @api.onchange('seller_ids','id')
     @api.depends('seller_ids')
     def _generate_product_code(self):
