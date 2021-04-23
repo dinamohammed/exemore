@@ -25,8 +25,8 @@ class ProductTemplate(models.Model):
                 template_id = self.search([],order='id desc', limit = 1)
                 next_id = template_id.id + 1
                 template.barcode = '"%s""%s"' % (str(next_id).zfill(5), str(vendor_id).zfill(4))
-            else:
-                template.barcode = ""
+#             else:
+#                 template.barcode = ""
                 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
@@ -79,8 +79,8 @@ class ProductProduct(models.Model):
                                                                color_code.zfill(3))
                     else:
                         product.barcode = '"%s""%s"' % (template_id.zfill(5), vendor_id.zfill(4))
-            else:
-                product.barcode = ""
+#             else:
+#                 product.barcode = ""
     
     
     
