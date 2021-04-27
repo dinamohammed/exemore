@@ -1,0 +1,99 @@
+<odoo>
+  <data>
+      
+      <record id="expenses_form" model="ir.ui.view">
+          <field name="name">expense.expense.form</field>
+          <field name="model">expense.expense</field>
+          <field name="arch" type="xml">
+              <form string="Expenses">
+                  <header>
+                      <button name="button_confirm" type="object" states="draft" string="Confirm" 
+                              class="oe_highlight" id="bid_confirm"/>
+                      <field name="state" widget="statusbar" statusbar_visible="draft,posted,sent" readonly="1"/>
+                  </header>
+                  <sheet>
+                      <group>
+                          <group name="expenses_info" string="Expenses Info">
+                              <field name = "expense_type"/>
+                              <field name = "journal_id"/>
+                              <field name = "move_id"/>
+                              <field name = "amount"/>
+                              <field name = "partner_id"/>
+                          </group>
+                      </group>
+                  </sheet>
+                </form>
+            </field>
+        </record>
+      
+      
+      <record id="expenses_tree" model="ir.ui.view">
+          <field name="name">expense.expense.tree</field>
+          <field name="model">expense.expense</field>
+          <field name="arch" type="xml">
+              <tree string="Expenses">
+                  <field name="expense_type" options='{"no_create_edit": True, "no_create": True, "no_open": True}'/>
+                  <field name="journal_id"/>
+                </tree>
+            </field>
+        </record>
+      <record id="expenses_type_tree" model="ir.ui.view">
+          <field name="name">expense.type.tree</field>
+          <field name="model">expense.type</field>
+          <field name="arch" type="xml">
+              <tree string="Expenses Type" editable="top">
+                  <field name="name"/>
+                  <field name="code"/>
+                  <field name="account_id"/>
+                </tree>
+            </field>
+        </record>
+      
+      
+      <record id="expenses_action" model="ir.actions.act_window">
+          <field name="name">Expenses</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">expense.expense</field>
+          <field name="view_mode">tree,form</field>
+          <field name="view_id" ref="expenses_tree"/>
+          <field name="domain">[]</field>
+          <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create Expenses
+              </p><p>
+                The Expenses can be created here in a seperate module.
+              </p>
+          </field>
+      </record>
+      
+      <record id="expenses_type_action" model="ir.actions.act_window">
+          <field name="name">Expenses Type</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">expense.type</field>
+          <field name="view_mode">tree,form</field>
+          <field name="view_id" ref="expenses_type_tree"/>
+          <field name="domain">[]</field>
+          <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create Expenses Type
+              </p><p>
+                The Expenses Type to be used in expenses.
+              </p>
+          </field>
+        </record>
+      
+      <menuitem name="Expenses"
+            id="menu_expenses_main_root"
+            groups="group_expenses_user,group_expenses_manager"
+            web_icon="expenses_module,static/description/icon.png"
+            sequence="28"/>
+      
+      <menuitem id="expense_main_menu" name="Expenses" 
+                parent="menu_expenses_main_root" sequence="1"/>
+      <menuitem id="expense_menu2" name="Expense" action="expenses_action" parent="expense_main_menu" sequence="15"/>
+      <menuitem id="expense_type_menu2" name="Expense Type" action="expenses_type_action" 
+                parent="expense_main_menu" sequence="17"/>
+
+   
+  </data>
+</odoo>

@@ -1,0 +1,65 @@
+<odoo>
+  <data>
+    <record id="product_pricelist_view_inherit_company_type" model="ir.ui.view">
+            <field name="name">product.pricelist.form.inherit.company_type</field>
+            <field name="model">product.pricelist</field>
+            <field name="inherit_id" ref="product.product_pricelist_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='country_group_ids']" position="after">
+                        <field name="company_type"/>
+                </xpath>
+          </field>
+      </record>
+      
+      <record id="view_partner_form_inherit_contact_method" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.contact.method</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="contact_method_ids" widget="many2many_checkboxes"/>
+                </xpath>
+<!--                 <xpath expr="." position="inside">
+                    <header>
+                        <button name="action_view_customers_to_followup"
+                                type="object"
+                                string="Follow up" 
+                              class="oe_highlight"/>
+                    </header>
+                </xpath> -->
+          </field>
+      </record>
+      
+      
+      <record model="ir.actions.server" id="action_view_customers_to_followup_server">
+            <field name="name">Followup Customers</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">
+                action = model.action_view_customers_to_followup()
+            </field>
+        </record>
+      
+      
+      <menuitem id="res_partner_menu_followup"
+        name="Follow up"
+        action="action_view_customers_to_followup_server"
+        parent="contacts.menu_contacts"
+        sequence="4"/>
+      
+      
+      <record model="ir.actions.server" id="action_followup_per_contact_method">
+            <field name="name">Send whatsapp Message</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="binding_model_id" ref="base.model_res_partner" />
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.send_whatsapp()
+            </field>
+        </record>
+      
+      
+  </data>
+</odoo>

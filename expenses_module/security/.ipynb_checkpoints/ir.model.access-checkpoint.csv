@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_expenses_user,expense.expense.user,model_expense_expense,expenses_module.group_expenses_user,1,1,1,1
+access_expenses_manager,expense.expense.manager,model_expense_expense,expenses_module.group_expenses_manager,1,1,1,1
+
+access_expenses_type_user,expense.type.user,model_expense_type,expenses_module.group_expenses_user,1,1,1,1
+access_expenses_type_manager,expense.type.manager,model_expense_type,expenses_module.group_expenses_manager,1,1,1,1
