@@ -25,12 +25,13 @@ class ProductTemplate(models.Model):
         if vals.get('product_ref', 'New') == 'New':
 #             raise ValidationError('%s'%self.env['ir.sequence'].next_by_code('contact.ref'))
             vals['product_ref'] = self.env['ir.sequence'].sudo().next_by_code('product.ref.seq') or '/'
+        self._generate_product_code()
         result = super(ProductTemplate, self).create(vals)
 
         return result
     
     @api.onchange('seller_ids','product_ref')
-    @api.depends('seller_ids')
+    @api.depends('seller_ids','product_ref')
     def _generate_product_code(self):
         """
 		Generate code of each product using it's component
@@ -40,9 +41,10 @@ class ProductTemplate(models.Model):
         for template in self:
             if template.seller_ids:
                 vendor_id = template.seller_ids[0].name.vendor_ref
-                template_id = self.search([],order='product_ref desc', limit = 1)
+                template_id = self.search([],order='id desc', limit = 1)
+#                 raise ValidationError('%s'%template_id.product_ref)
                 next_id = int(template_id.product_ref) + 1
-                template.barcode = '%s%s' % (str(next_id).zfill(5), str(vendor_id).zfill(4))
+                template.barcode = '%s%s' % (str(template_id.product_ref).zfill(5), str(vendor_id).zfill(4))
 #             else:
 #                 template.barcode = ""
                 
