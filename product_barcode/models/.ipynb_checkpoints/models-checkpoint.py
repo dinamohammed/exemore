@@ -11,7 +11,25 @@ class ProductTemplate(models.Model):
     
     attribute_line_ids = fields.One2many('product.template.attribute.line', 'product_tmpl_id',
                                          'Product Attributes', copy=False)
-    @api.onchange('seller_ids','id')
+    
+    product_ref = fields.Char('Reference',required=True, index=True,
+                              copy=False, default='New', store = True, readonly = True)
+    
+    @api.model
+    def create(self, vals):
+        """
+        Add new option to get sequence automatic of ref number
+        :param vals:
+        :return:
+        """
+        if vals.get('product_ref', 'New') == 'New':
+#             raise ValidationError('%s'%self.env['ir.sequence'].next_by_code('contact.ref'))
+            vals['product_ref'] = self.env['ir.sequence'].sudo().next_by_code('product.ref.seq') or '/'
+        result = super(ProductTemplate, self).create(vals)
+
+        return result
+    
+    @api.onchange('seller_ids','product_ref')
     @api.depends('seller_ids')
     def _generate_product_code(self):
         """
@@ -21,9 +39,9 @@ class ProductTemplate(models.Model):
 		"""
         for template in self:
             if template.seller_ids:
-                vendor_id = template.seller_ids[0].name.id
-                template_id = self.search([],order='id desc', limit = 1)
-                next_id = template_id.id + 1
+                vendor_id = template.seller_ids[0].name.vendor_ref
+                template_id = self.search([],order='product_ref desc', limit = 1)
+                next_id = int(template_id.product_ref) + 1
                 template.barcode = '"%s""%s"' % (str(next_id).zfill(5), str(vendor_id).zfill(4))
 #             else:
 #                 template.barcode = ""
@@ -53,8 +71,8 @@ class ProductProduct(models.Model):
             size_attr = self.env.ref('product_barcode.product_attribute_size')
 #             raise ValidationError('hhhhhh')
             if product.variant_seller_ids:
-                vendor_id = product.variant_seller_ids[0].name.id
-                template_id = product.product_tmpl_id.id
+                vendor_id = product.variant_seller_ids[0].name.vendor_ref
+                template_id = product.product_tmpl_id.product_ref
                 
                 for attr_val_line in product.product_template_attribute_value_ids:
                     if attr_val_line.attribute_id == color_attr \
@@ -91,3 +109,24 @@ class ProductProduct(models.Model):
         products._generate_product_code()
         self.clear_caches()
         return products
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+    
+    vendor_ref = fields.Char('Reference',required=True, index=True, copy=False,
+                             default='New', store = True, readonly= True)
+    
+    
+    @api.model
+    def create(self, vals):
+        """
+        Add new option to get sequence automatic of ref number
+        :param vals:
+        :return:
+        """
+        if vals.get('vendor_ref', 'New') == 'New':
+#             raise ValidationError('%s'%self.env['ir.sequence'].next_by_code('contact.ref'))
+            vals['vendor_ref'] = self.env['ir.sequence'].sudo().next_by_code('vendor.ref.seq') or '/'
+        result = super(ResPartner, self).create(vals)
+
+        return result

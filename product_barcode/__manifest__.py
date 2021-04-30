@@ -27,5 +27,6 @@
         # 'security/ir.model.access.csv',
         'views/views.xml',
         'data/product_attributes.xml',
+        'data/ir_sequence.xml',
     ],
 }
