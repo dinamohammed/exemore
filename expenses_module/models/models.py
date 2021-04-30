@@ -92,4 +92,4 @@ class AccountMoveInherit(models.Model):
     
     expense_id = fields.Many2one('expense.expense', string="Expense Ref", copy=False)
     
-#     customer_due = fields.Monetary(related = 'partner_id.total_due', store = True)
+    customer_due = fields.Monetary(related = 'partner_id.total_due', store = True)
