@@ -127,9 +127,9 @@ class ResPartner(models.Model):
         :return:
         """
         if vals.get('vendor_ref', 'New') == 'New':
-            if self.supplier_rank:
-#             raise ValidationError('%s'%self.env['ir.sequence'].next_by_code('contact.ref'))
-                vals['vendor_ref'] = self.env['ir.sequence'].sudo().next_by_code('vendor.ref.seq') or '/'
+            if vals.get('supplier_rank'):
+          #  raise ValidationError('%s'%vals.get('supplier_rank'))
+               vals['vendor_ref'] = self.env['ir.sequence'].sudo().next_by_code('vendor.ref.seq') or '/'
         result = super(ResPartner, self).create(vals)
 
         return result
