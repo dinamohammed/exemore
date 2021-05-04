@@ -28,7 +28,7 @@
 ^FS
 ^FO20,50
 ^A1N20,20
-^FD655 <t t-esc="move_line.product_id.name"/> 
+^FD655 <t t-esc="move_line.product_id.display_name"/> 
 ^FS
 ^FO20,80
 ^A1N20,20
