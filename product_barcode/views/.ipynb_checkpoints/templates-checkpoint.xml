@@ -34,9 +34,9 @@
 ^A1N20,20
 ^FD<t t-esc="move_line.product_id.size_name"/> - <t t-esc="move_line.product_id.color_name" />
 ^FS
-^FO20,150
+^FO20,120
 <t t-if="move_line.product_id.tracking == 'none' and move_line.product_id.barcode">
-^BCN,30,Y,N,N,A
+^BCN,80,N,N,N,A
 ^FD<t t-esc="move_line.product_id.barcode"/>^FS
 </t>
 ^FS
