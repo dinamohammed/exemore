@@ -57,6 +57,7 @@ class ProductProduct(models.Model):
     color_code = fields.Char(compute='_generate_product_code', size=3,
                              help="Color Code from field [Variant Color Attribute] [3 digits]")
     color_name = fields.Char(compute='_generate_product_code')
+    size_name = fields.Char(compute='_generate_product_code')
     
     @api.onchange('variant_seller_ids', 'product_tmpl_id',
                   'product_template_attribute_value_ids')
@@ -85,6 +86,7 @@ class ProductProduct(models.Model):
                     if attr_val_line.attribute_id == size_attr \
                             and attr_val_line.product_attribute_value_id:
                         product.size_code = attr_val_line.product_attribute_value_id.name[:2]
+                        product.size_name = attr_val_line.product_attribute_value_id.name[2:]
             
                     if not product.color_code:
                         product.color_code = "000"
