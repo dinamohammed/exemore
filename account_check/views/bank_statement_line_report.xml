@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="bank_statement_line_report_doc">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o.with_context(lang=lang)" />
+            <div class="page">
+                <h2 class="text-center">Bank Statement Line: <span t-esc="o.name"/></h2>
+                <!--                <div class="row mt32 mb32" >-->
+                <!--                    <div class="col-md-auto mw-100 mb-2" t-if="o.statement_id" name="statement_id">-->
+                <!--                        <strong>Statement:</strong>-->
+                <!--                        <p class="m-0" t-field="o.statement_id.name"/>-->
+                <!--                    </div>-->
+                <!--                    <div class="col-md-auto mw-100 mb-2" t-if="o.partner_id" name="partner_id">-->
+                <!--                        <strong>Partner:</strong>-->
+                <!--                        <p class="m-0" t-field="o.partner_id.name"/>-->
+                <!--                    </div>-->
+                <!--                    <div class="col-md-auto mw-100 mb-2" >-->
+                <!--                        <strong>Amount:</strong>-->
+                <!--                        <p class="m-0" t-field="o.amount"/>-->
+                <!--                    </div>-->
+                <!--                    <div class="col-md-auto mw-100 mb-2" t-if="o.date" name="date">-->
+                <!--                        <strong>Date:</strong>-->
+                <!--                        <p class="m-0" t-field="o.date"/>-->
+                <!--                    </div>-->
+                <!--                    <div class="col-md-auto mw-100 mb-2" t-if="o.ref" name="re">-->
+                <!--                        <strong>Reference:</strong>-->
+                <!--                        <p class="m-0" t-field="o.ref"/>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+                <!--                <div class="row">-->
+                <div class="col-md-6">
+                    <p>
+                        <b>Statement:</b>
+                        <span  t-if="o.statement_id" t-field="o.statement_id.name"/>
+                        <span  t-if="not o.statement_id">------------------</span>
+                    </p>
+                    <p>
+                        <b>Partner:</b>
+                        <span  t-if="o.partner_id" t-field="o.partner_id.name"/>
+                        <span  t-if="not o.partner_id">------------------</span></p>
+                    <p>
+                        <b>Amount:</b>
+                        <span  t-field="o.amount"/>
+                    </p>
+                    <p>
+                        <b>Date:</b>
+                        <span t-field="o.date"/>
+                    </p>
+                    <p>
+                        <b>Reference:</b>
+                        <span t-field="o.ref"/>
+                    </p>
+                    <p t-if="o.move_name">
+                        <b>Entry:</b>
+                        <span t-field="o.move_name"/>
+                    </p>
+                </div>
+                <div class="row" t-if="o.note">
+                    <p class="width:90%">Notes:</p>
+                    <p class="width:90%" t-esc="o.note"/>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="bank_statement_line_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lang" t-value="user.partner_id.lang"/>
+                <t t-call="account_check.bank_statement_line_report_doc" t-lang="lang"/>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>

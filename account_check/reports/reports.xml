@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+       <report
+                id="report_bank_statement_line"
+                model="account.bank.statement.line"
+                report_type="qweb-pdf"
+                string="Statement Line"
+                menu="False"
+                name="account_check.bank_statement_line_report"
+                file="account_check.bank_statement_line_report"
+        />
+
+
+    </data>
+</odoo>
