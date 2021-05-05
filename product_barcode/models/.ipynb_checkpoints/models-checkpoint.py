@@ -40,7 +40,7 @@ class ProductTemplate(models.Model):
 		"""
         for template in self:
             if template.seller_ids:
-                vendor_id = template.seller_ids[0].name.id
+                vendor_id = template.seller_ids[0].name.vendor_ref
 #                 vendor_id = template.seller_ids[0].name.id
                 template_id = self.search([],order='id desc', limit = 1)
 #                 raise ValidationError('%s'%template_id.product_ref)
@@ -76,8 +76,8 @@ class ProductProduct(models.Model):
             size_attr = self.env.ref('product_barcode.product_attribute_size')
 #             raise ValidationError('hhhhhh')
             if product.variant_seller_ids:
-#                 vendor_id = product.variant_seller_ids[0].name.id
-                vendor_id = product.variant_seller_ids[0].name.id
+#vendor_id = product.variant_seller_ids[0].name.id
+                vendor_id = product.variant_seller_ids[0].name.vendor_ref
                 template_id = product.product_tmpl_id.product_ref
                 
                 for attr_val_line in product.product_template_attribute_value_ids:
@@ -121,16 +121,15 @@ class ProductProduct(models.Model):
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     
-#    vendor_ref = fields.Char('Reference',required=True, index=True, copy=False,
-#                              default='New', store = True, readonly= True)
+    vendor_ref = fields.Char('Reference',required=True, index=True, copy=False,
+                              default='New', store = True, readonly= True)
     
     
-#    @api.model
-#    def create(self, vals):
-#        if vals.get('vendor_ref', 'New') == 'New':
-#            if vals.get('supplier_rank'):
-#                vals['vendor_ref'] = self.env['ir.sequence'].sudo().next_by_code('vendor.ref.seq') or '/'
-#        result = super(ResPartner, self).create(vals)
+    @api.model
+    def create(self, vals):
+        if vals.get('vendor_ref', 'New') == 'New':
+            if vals.get('supplier_rank'):
+                vals['vendor_ref'] = self.env['ir.sequence'].sudo().next_by_code('vendor.ref.seq') or '/'
+        result = super(ResPartner, self).create(vals)
 
-#        return result
-      
+        return result
