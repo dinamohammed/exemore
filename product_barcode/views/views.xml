@@ -42,9 +42,9 @@
                         <field name="id" readonly="1"/>
                     </div>
                 </xpath>
-                <xpath expr="//field[@name='property_payment_term_id']" position="after">
+<!--                 <xpath expr="//field[@name='property_payment_term_id']" position="after">
                     <field name="vendor_ref" readonly="1"/>
-                </xpath>
+                </xpath> -->
                 <xpath expr="//field[@name='property_payment_term_id']" position="before">
                     <field name="customer_rank"/>
                 </xpath>
