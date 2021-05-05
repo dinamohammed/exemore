@@ -121,21 +121,21 @@ class ProductProduct(models.Model):
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     
-#     vendor_ref = fields.Char('Reference',required=True, index=True, copy=False,
-#                              default='New', store = True, readonly= True)
+     vendor_ref = fields.Char('Reference',required=True, index=True, copy=False,
+                              default='New', store = True, readonly= True)
     
     
-#     @api.model
-#     def create(self, vals):
-#         """
-#         Add new option to get sequence automatic of ref number
-#         :param vals:
-#         :return:
-#         """
-#         if vals.get('vendor_ref', 'New') == 'New':
-#             if vals.get('supplier_rank'):
-#           #  raise ValidationError('%s'%vals.get('supplier_rank'))
-#                vals['vendor_ref'] = self.env['ir.sequence'].sudo().next_by_code('vendor.ref.seq') or '/'
-#         result = super(ResPartner, self).create(vals)
+     @api.model
+     def create(self, vals):
+         """
+         Add new option to get sequence automatic of ref number
+         :param vals:
+         :return:
+         """
+         if vals.get('vendor_ref', 'New') == 'New':
+             if vals.get('supplier_rank'):
+           #  raise ValidationError('%s'%vals.get('supplier_rank'))
+                vals['vendor_ref'] = self.env['ir.sequence'].sudo().next_by_code('vendor.ref.seq') or '/'
+         result = super(ResPartner, self).create(vals)
 
-#         return result
+         return result
