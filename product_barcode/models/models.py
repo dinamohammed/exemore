@@ -121,7 +121,7 @@ class ProductProduct(models.Model):
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     
-     vendor_ref = fields.Char('Reference',required=True, index=True, copy=False,
+    vendor_ref = fields.Char('Reference',required=True, index=True, copy=False,
                               default='New', store = True, readonly= True)
     
     
