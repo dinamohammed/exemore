@@ -40,8 +40,8 @@ class ProductTemplate(models.Model):
 		"""
         for template in self:
             if template.seller_ids:
-#                 vendor_id = template.seller_ids[0].name.vendor_ref
-                vendor_id = template.seller_ids[0].name.id
+                vendor_id = template.seller_ids[0].name.vendor_ref
+#                 vendor_id = template.seller_ids[0].name.id
                 template_id = self.search([],order='id desc', limit = 1)
 #                 raise ValidationError('%s'%template_id.product_ref)
                 next_id = int(template_id.product_ref) + 1
@@ -76,8 +76,8 @@ class ProductProduct(models.Model):
             size_attr = self.env.ref('product_barcode.product_attribute_size')
 #             raise ValidationError('hhhhhh')
             if product.variant_seller_ids:
-                vendor_id = product.variant_seller_ids[0].name.id
-#                 vendor_id = product.variant_seller_ids[0].name.vendor_ref
+#                 vendor_id = product.variant_seller_ids[0].name.id
+                vendor_id = product.variant_seller_ids[0].name.vendor_ref
                 template_id = product.product_tmpl_id.product_ref
                 
                 for attr_val_line in product.product_template_attribute_value_ids:
