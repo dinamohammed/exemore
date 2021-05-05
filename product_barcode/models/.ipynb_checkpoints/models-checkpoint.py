@@ -44,7 +44,7 @@ class ProductTemplate(models.Model):
 #                 vendor_id = template.seller_ids[0].name.id
                 template_id = self.search([],order='id desc', limit = 1)
 #                 raise ValidationError('%s'%template_id.product_ref)
-                next_id = int(template_id.product_ref) + 1
+#                next_id = int(template_id.product_ref) + 1
                 template.barcode = '%s%s' % (str(template_id.product_ref).zfill(5), str(vendor_id).zfill(4))
 #             else:
 #                 template.barcode = ""
