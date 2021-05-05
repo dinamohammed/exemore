@@ -33,13 +33,13 @@
 ^FO20,80
 ^A1N20,20
 <t t-if= "move_line.product_id.variant_seller_ids[0].name.name">
-^FD<t t-esc="move_line.product_id.variant_seller_ids[0].name.name"/>
+^FD <t t-esc="move_line.product_id.variant_seller_ids[0].name.name"/>
 </t>
 ^FS
 ^FO20,120
 <t t-if="move_line.product_id.tracking == 'none' and move_line.product_id.barcode">
 ^BCN,80,N,N,N,A
-^FD<t t-esc="move_line.product_id.barcode"/>^FS
+^FD <t t-esc="move_line.product_id.barcode"/>^FS
 </t>
 ^FS
 ^XZ
