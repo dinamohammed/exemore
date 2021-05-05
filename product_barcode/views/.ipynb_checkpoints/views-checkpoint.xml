@@ -11,6 +11,9 @@
                         <field name="id" readonly="1"/>
                     </div>
                 </xpath>
+                <xpath expr="//field[@name='type']" position="before">
+                    <field name="product_ref" readonly="1"/>
+                </xpath>
           </field>
       </record>
       
@@ -38,6 +41,15 @@
                         <label for="id"/>
                         <field name="id" readonly="1"/>
                     </div>
+                </xpath>
+                <xpath expr="//field[@name='property_payment_term_id']" position="after">
+                    <field name="vendor_ref" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='property_payment_term_id']" position="before">
+                    <field name="customer_rank"/>
+                </xpath>
+                <xpath expr="//field[@name='property_supplier_payment_term_id']" position="before">
+                    <field name="supplier_rank"/>
                 </xpath>
           </field>
       </record>
