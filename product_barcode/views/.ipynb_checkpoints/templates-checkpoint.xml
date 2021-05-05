@@ -32,8 +32,8 @@
 ^FS
 ^FO20,80
 ^A1N20,20
-<t t-if= "move_line.product_id.size_name and move_line.product_id.color_name" >
-^FD<t t-esc="move_line.product_id.size_name"/> - <t t-esc="move_line.product_id.color_name" />
+<t t-if= "move_line.product_id.variant_seller_ids[0].name.name">
+^FD<t t-esc="move_line.product_id.variant_seller_ids[0].name.name"/>
 </t>
 ^FS
 ^FO20,120
