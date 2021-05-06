@@ -1,0 +1,1 @@
+COPY /B "C:\Users\Nabil\Downloads\Barcodes (ZPL).txt" \\DESKTOP-O5U93ME\ZDesigner
